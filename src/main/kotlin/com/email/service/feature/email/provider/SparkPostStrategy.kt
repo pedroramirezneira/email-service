@@ -20,20 +20,24 @@ class SparkPostStrategy(
     override val provider = EmailProvider.SPARKPOST
 
     override fun send(email: EmailDto): Result<Unit, EmailFailure> {
-        val response = client.sendMessage(
-            "${emailProperties.fromName} <${emailProperties.fromAddress}>",
-            email.to,
-            email.subject,
-            email.body,
-            null
-        )
-        return when (response.responseCode) {
-            200, 201 -> Result.Success(Unit)
-            else -> Result.Failure(
-                EmailFailure.ProviderError(
-                    "SparkPost error: ${response.responseCode} - ${response.responseBody}"
-                )
+        return try {
+            val response = client.sendMessage(
+                "${emailProperties.fromName} <${emailProperties.fromAddress}>",
+                email.to,
+                email.subject,
+                email.body,
+                null
             )
+            when (response.responseCode) {
+                in 200..299 -> Result.Success(Unit)
+                else -> Result.Failure(
+                    EmailFailure.ProviderError(
+                        "SparkPost error: ${response.responseCode} - ${response.responseBody}"
+                    )
+                )
+            }
+        } catch (e: Exception) {
+            Result.Failure(EmailFailure.ProviderError("SparkPost error: ${e.message}"))
         }
     }
 }
