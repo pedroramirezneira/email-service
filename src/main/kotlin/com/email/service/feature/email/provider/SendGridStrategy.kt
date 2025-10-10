@@ -44,17 +44,13 @@ class SendGridStrategy(
             val response = sendGrid.api(request)
             when (response.statusCode) {
                 in 200..299 -> Result.Success(Unit)
-                else -> {
-                    println(response.body)
-                    Result.Failure(
-                        EmailFailure.ProviderError(
-                            "SendGrid error: ${response.statusCode} - ${response.body}"
-                        )
+                else -> Result.Failure(
+                    EmailFailure.ProviderError(
+                        "SendGrid error: ${response.statusCode} - ${response.body}"
                     )
-                }
+                )
             }
         } catch (e: Exception) {
-            println(e)
             Result.Failure(EmailFailure.ProviderError("SendGrid error: ${e.message}"))
         }
     }
