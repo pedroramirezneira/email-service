@@ -15,4 +15,12 @@ class EmailProviderRegistry(
     fun getDefaultStrategy(): EmailProviderStrategy? {
         return getStrategyFor(properties.defaultProvider) ?: strategies.firstOrNull()
     }
+
+    fun getNextStrategy(strategy: EmailProviderStrategy): EmailProviderStrategy? {
+        val index = strategies.indexOf(strategy)
+        return when {
+            index == -1 -> strategies.firstOrNull()
+            else -> strategies[(index + 1) % strategies.size]
+        }
+    }
 }

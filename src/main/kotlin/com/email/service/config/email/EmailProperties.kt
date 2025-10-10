@@ -9,4 +9,5 @@ data class EmailProperties(
     val defaultProvider: EmailProvider,
     val fromAddress: String,
     val fromName: String?,
+    val maxRetries: Int = 2,
 )

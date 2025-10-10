@@ -18,27 +18,34 @@ class EmailController(
         val result = emailService.sendEmail(email)
         return when (result) {
             is Result.Success -> ResponseEntity.ok(mapOf("message" to "Email sent successfully"))
-            is Result.Failure -> when (val error = result.error) {
-                is EmailFailure.InvalidEmailAddress -> ResponseEntity.badRequest().body(
-                    mapOf("error" to "Invalid email address: ${error.address}")
-                )
-
-                is EmailFailure.LimitExceeded -> ResponseEntity.status(429).body(
-                    mapOf("error" to "Email limit exceeded: ${error.limit}")
-                )
-
-                is EmailFailure.NoProviderAvailable -> ResponseEntity.status(503).body(
-                    mapOf("error" to "No email provider available")
-                )
-
-                is EmailFailure.ProviderError -> ResponseEntity.status(503).body(
-                    mapOf("error" to "Email provider error: ${error.message}")
-                )
-
-                is EmailFailure.UnknownError -> ResponseEntity.status(500).body(
-                    mapOf("error" to "Unknown error occurred")
-                )
-            }
+            is Result.Failure -> mapFailureToResponseEntity(result)
         }
     }
+
+    private fun mapFailureToResponseEntity(result: Result.Failure<EmailFailure>): ResponseEntity<Map<String, Any>> =
+        when (val error = result.error) {
+            is EmailFailure.InvalidEmailAddress -> ResponseEntity.badRequest().body(
+                mapOf("error" to "Invalid email address: ${error.address}")
+            )
+
+            is EmailFailure.LimitExceeded -> ResponseEntity.status(429).body(
+                mapOf("error" to "Email limit exceeded: ${error.limit}")
+            )
+
+            is EmailFailure.NoProviderAvailable -> ResponseEntity.status(503).body(
+                mapOf("error" to "No email provider available")
+            )
+
+            is EmailFailure.ProviderError -> ResponseEntity.status(503).body(
+                mapOf("error" to "Email provider error: ${error.message}")
+            )
+
+            is EmailFailure.UnknownError -> ResponseEntity.status(500).body(
+                mapOf("error" to "Unknown error occurred")
+            )
+
+            is EmailFailure.MaxRetriesExceeded -> ResponseEntity.status(500).body(
+                mapOf("error" to "Max retries exceeded")
+            )
+        }
 }
