@@ -15,6 +15,10 @@ class EmailService(
     private val statsService: StatsService,
 ) {
     fun sendEmail(userId: UUID, email: EmailDto): Result<Unit, EmailFailure> {
+        val total = statsService.getStatsForUser(userId)
+        if (total >= properties.dailyLimit) {
+            return Result.Failure(EmailFailure.LimitExceeded(properties.dailyLimit))
+        }
         val strategy = registry.getDefaultStrategy()
             ?: return Result.Failure(EmailFailure.NoProviderAvailable)
         val result = sendEmail(email, strategy, 0)

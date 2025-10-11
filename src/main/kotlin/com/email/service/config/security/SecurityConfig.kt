@@ -1,6 +1,6 @@
 package com.email.service.config.security
 
-import com.email.service.feature.auth.Role
+import com.email.service.feature.role.Role
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.convert.converter.Converter

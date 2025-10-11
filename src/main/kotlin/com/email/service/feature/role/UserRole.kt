@@ -1,6 +1,5 @@
 package com.email.service.feature.role
 
-import com.email.service.feature.auth.Role
 import com.email.service.feature.user.User
 import jakarta.persistence.Column
 import jakarta.persistence.Entity

@@ -1,6 +1,7 @@
 package com.email.service.feature.auth
 
 import com.email.service.common.Result
+import com.email.service.feature.role.Role
 import com.email.service.feature.role.UserRoleService
 import com.email.service.feature.user.User
 import com.email.service.feature.user.UserDto

@@ -9,4 +9,5 @@ data class EmailProperties(
     val fromAddress: String,
     val fromName: String?,
     val maxRetries: Int = 2,
+    val dailyLimit: Int = 1000,
 )

@@ -20,6 +20,13 @@ class StatsService(
         return repository.countEmailsByUserInRange(start, end)
     }
 
+    fun getStatsForUser(userId: UUID): Long {
+        val now = ZonedDateTime.now(zone)
+        val start = now.toLocalDate().atStartOfDay(zone).toInstant()
+        val end = now.toLocalDate().plusDays(1).atStartOfDay(zone).toInstant()
+        return repository.countByUserIdAndTimestampBetween(userId, start, end)
+    }
+
     fun addStats(userId: UUID) {
         val user = userRepository.findById(userId)
         if (user.isEmpty) return

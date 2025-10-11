@@ -2,6 +2,7 @@ package com.email.service.feature.auth
 
 import com.email.service.common.Result
 import com.email.service.config.security.SecurityProperties
+import com.email.service.feature.role.Role
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm
 import org.springframework.security.oauth2.jwt.JwsHeader
 import org.springframework.security.oauth2.jwt.JwtClaimsSet

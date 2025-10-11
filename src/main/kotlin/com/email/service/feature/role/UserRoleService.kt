@@ -1,6 +1,5 @@
 package com.email.service.feature.role
 
-import com.email.service.feature.auth.Role
 import com.email.service.feature.user.UserRepository
 import org.springframework.stereotype.Service
 import java.util.*

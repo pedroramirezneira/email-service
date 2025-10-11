@@ -22,4 +22,10 @@ interface StatsRepository : JpaRepository<Stats, UUID> {
         @Param("start") start: Instant,
         @Param("end") end: Instant
     ): List<StatsDto>
+
+    fun countByUserIdAndTimestampBetween(
+        userId: UUID,
+        start: Instant,
+        end: Instant
+    ): Long
 }
