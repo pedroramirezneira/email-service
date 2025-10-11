@@ -56,7 +56,7 @@ class AuthService(
             roles = roles.toSet()
         )
         return when (result) {
-            is Result.Success -> Result.Success(TokenDto(result.value))
+            is Result.Success -> Result.Success(TokenDto(result.value.tokenValue))
             is Result.Failure -> result
         }
     }
