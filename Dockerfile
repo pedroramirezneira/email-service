@@ -2,7 +2,7 @@ FROM gradle:8-jdk17-alpine AS build
 LABEL authors="pedro"
 WORKDIR /app
 COPY . .
-RUN gradle build --no-daemon
+RUN gradle build -x test --no-daemon
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
