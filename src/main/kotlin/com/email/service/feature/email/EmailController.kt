@@ -2,10 +2,13 @@ package com.email.service.feature.email
 
 import com.email.service.common.Result
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.*
 
 @RestController
 @RequestMapping("/api/v1/emails")
@@ -14,9 +17,9 @@ class EmailController(
 ) {
 
     @PostMapping
-    fun sendEmail(@RequestBody email: EmailDto): ResponseEntity<Map<String, Any>> {
-        val result = emailService.sendEmail(email)
-        return when (result) {
+    fun sendEmail(@AuthenticationPrincipal jwt: Jwt, @RequestBody email: EmailDto): ResponseEntity<Map<String, Any>> {
+        val userId = UUID.fromString(jwt.subject)
+        return when (val result = emailService.sendEmail(userId, email)) {
             is Result.Success -> ResponseEntity.ok(mapOf("message" to "Email sent successfully"))
             is Result.Failure -> mapFailureToResponseEntity(result)
         }

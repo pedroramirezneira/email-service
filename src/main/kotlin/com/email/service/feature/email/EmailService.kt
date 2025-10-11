@@ -4,17 +4,24 @@ import com.email.service.common.Result
 import com.email.service.config.email.EmailProperties
 import com.email.service.feature.email.provider.EmailProviderRegistry
 import com.email.service.feature.email.provider.EmailProviderStrategy
+import com.email.service.feature.stats.StatsService
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class EmailService(
     private val registry: EmailProviderRegistry,
     private val properties: EmailProperties,
+    private val statsService: StatsService,
 ) {
-    fun sendEmail(email: EmailDto): Result<Unit, EmailFailure> {
+    fun sendEmail(userId: UUID, email: EmailDto): Result<Unit, EmailFailure> {
         val strategy = registry.getDefaultStrategy()
             ?: return Result.Failure(EmailFailure.NoProviderAvailable)
-        return sendEmail(email, strategy, 0)
+        val result = sendEmail(email, strategy, 0)
+        if (result is Result.Success) {
+            statsService.addStats(userId)
+        }
+        return result
     }
 
     private tailrec fun sendEmail(
