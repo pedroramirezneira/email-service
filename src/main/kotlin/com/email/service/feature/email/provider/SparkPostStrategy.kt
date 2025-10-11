@@ -9,13 +9,13 @@ import com.sparkpost.Client
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 
-@ConditionalOnProperty(name = ["email.enabled-providers"], havingValue = "sparkpost")
+@ConditionalOnProperty(name = ["email.sparkpost.enabled"], havingValue = "true")
 @Service
 class SparkPostStrategy(
     sparkPostProperties: SparkPostProperties,
-    val emailProperties: EmailProperties,
+    private val emailProperties: EmailProperties,
 ) : EmailProviderStrategy {
-    val client = Client(sparkPostProperties.apiKey)
+    private val client = Client(sparkPostProperties.apiKey)
 
     override val provider = EmailProvider.SPARKPOST
 

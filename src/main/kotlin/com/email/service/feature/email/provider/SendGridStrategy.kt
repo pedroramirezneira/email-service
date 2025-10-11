@@ -15,7 +15,7 @@ import com.sendgrid.helpers.mail.objects.Personalization
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 
-@ConditionalOnProperty(name = ["email.enabled-providers"], havingValue = "sendgrid")
+@ConditionalOnProperty(name = ["email.sendgrid.enabled"], havingValue = "true")
 @Service
 class SendGridStrategy(
     sendGridProperties: SendGridProperties,

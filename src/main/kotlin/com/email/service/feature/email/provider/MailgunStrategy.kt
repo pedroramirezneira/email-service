@@ -11,13 +11,13 @@ import com.mailgun.model.message.Message
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 
-@ConditionalOnProperty(name = ["email.enabled-providers"], havingValue = "mailgun")
+@ConditionalOnProperty(name = ["email.mailgun.enabled"], havingValue = "true")
 @Service
 class MailgunStrategy(
-    val mailgunProperties: MailgunProperties,
-    val emailProperties: EmailProperties,
+    private val mailgunProperties: MailgunProperties,
+    private val emailProperties: EmailProperties,
 ) : EmailProviderStrategy {
-    val client = MailgunClient.config(mailgunProperties.apiKey).createApi(MailgunMessagesApi::class.java)
+    private val client = MailgunClient.config(mailgunProperties.apiKey).createApi(MailgunMessagesApi::class.java)
 
     override val provider = EmailProvider.MAILGUN
 

@@ -4,13 +4,14 @@ import com.email.service.common.Result
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.TestPropertySource
+import java.util.*
 import kotlin.test.Test
 
 @SpringBootTest
 @TestPropertySource(
     properties = [
         "email.default-provider=sendgrid",
-        "email.enabled-providers=sendgrid",
+        "email.sendgrid.enabled=true",
     ]
 )
 class SendGridIntegrationTest(
@@ -19,6 +20,7 @@ class SendGridIntegrationTest(
     @Test
     fun testSendGrid() {
         val result = service.sendEmail(
+            UUID.randomUUID(),
             EmailDto(
                 to = listOf("test@mail.com"),
                 body = "Test email body",
